@@ -4,15 +4,15 @@
     <string name="user">Профиль</string>
     <string name="new_claim">Новая заявка</string>
     <string name="claims">Заявки</string>
-    <string-array name="planets_array">
-        <item>Mercury</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
+    <string-array name="accidents_array">
+        <item>Неправильная парковка</item>
+        <item>Не оплатил парковку</item>
+        <item>Загораживает проезд</item>
+        <item>Парковка в неположенном месте</item>
+        <item>Проезд на красный свет</item>
+
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

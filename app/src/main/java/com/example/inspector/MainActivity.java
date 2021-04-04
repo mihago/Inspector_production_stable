@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         Spinner accident_type = (Spinner) findViewById(R.id.accident_type);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.planets_array, android.R.layout.simple_spinner_item);
+                R.array.accidents_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         accident_type.setAdapter(adapter);
 
