@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="mediumMarginLeft">6dp</dimen>
+    <dimen name="mediumPaddingLeft">6dp</dimen>
+    <dimen name="inputWidth">336dp</dimen>
+</resources>
