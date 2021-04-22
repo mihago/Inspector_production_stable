@@ -67,7 +67,8 @@ public class AccidentFragment extends Fragment {
 
         AF_next = (Button) v.findViewById(R.id.AF_next);
         AF_next.setOnClickListener(v3 ->{
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new MediaFragment()).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new MediaFragment(),"media").commit();
+
         });
 
         return v;

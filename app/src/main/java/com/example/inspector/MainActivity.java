@@ -19,13 +19,13 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView b=(BottomNavigationView) findViewById(R.id.bottom_navigation);
         //TODO: appbar layout navigation icon
 
-        getSupportFragmentManager().beginTransaction().add(R.id.fragments_container,new AccidentFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragments_container,new AccidentFragment(),"accident").commit();
 
 
         b.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+                getSupportFragmentManager().beginTransaction().к
                return true;
             }
         });
