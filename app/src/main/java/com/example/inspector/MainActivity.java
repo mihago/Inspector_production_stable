@@ -2,17 +2,12 @@ package com.example.inspector;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
-
 
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,12 +17,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView b=(BottomNavigationView) findViewById(R.id.bottom_navigation);
-        Spinner accident_type = (Spinner) findViewById(R.id.accident_type);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.accidents_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        accident_type.setAdapter(adapter);
-//getFragmentManager().beginTransaction().replace(R.id.fragments_container,BlankFragment.class,'f').commit();
+        //TODO: appbar layout navigation icon
+
+        getSupportFragmentManager().beginTransaction().add(R.id.fragments_container,new AccidentFragment()).commit();
+
 
         b.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
