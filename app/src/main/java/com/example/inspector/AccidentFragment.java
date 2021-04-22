@@ -71,5 +71,6 @@ public class AccidentFragment extends Fragment {
         });
 
         return v;
+
     }
 }
