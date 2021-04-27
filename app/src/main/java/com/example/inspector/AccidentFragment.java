@@ -1,4 +1,5 @@
-package com.example.inspector;
+
+        package com.example.inspector;
 
 import android.os.Bundle;
 
@@ -67,8 +68,7 @@ public class AccidentFragment extends Fragment {
 
         AF_next = (Button) v.findViewById(R.id.AF_next);
         AF_next.setOnClickListener(v3 ->{
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new MediaFragment(),"media").commit();
-
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new MediaFragment()).addToBackStack("v").commit();
         });
 
         return v;
