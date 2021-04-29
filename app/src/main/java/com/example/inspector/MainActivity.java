@@ -34,11 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
         });
         b.setOnNavigationItemSelectedListener(item -> {
-           return true;
+            return true;
+
+
         });
-
-
-
-        
-    }
-}
+}}
