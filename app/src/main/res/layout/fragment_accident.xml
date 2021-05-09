@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AccidentFragment">
 
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -23,7 +24,6 @@
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.7" />
-
 
     <Spinner
         android:id="@+id/accident_type"
