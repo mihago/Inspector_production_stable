@@ -1,19 +1,28 @@
 
         package com.example.inspector;
 
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
+import android.service.autofill.RegexValidator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.util.regex.Pattern;
 
 
-public class AccidentFragment extends Fragment {
+        public class AccidentFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -54,6 +63,7 @@ public class AccidentFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O_MR1)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,12 +74,37 @@ public class AccidentFragment extends Fragment {
                 R.array.accidents_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         accident_type.setAdapter(adapter);
+        TextView autonumber=(TextView) v.findViewById(R.id.AF_autonumber);
+        autonumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    if(Pattern.matches("^[а-яА-Я]\\d{3}[а-яА-Я]{2}$",autonumber.getText())){
+                        autonumber.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border));
+
+                    }
+                    else{
+                        autonumber.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border_red));
+                    }
+                }
+            }
+        });
 
 
         AF_next = (Button) v.findViewById(R.id.AF_next);
         AF_next.setOnClickListener(v3 ->{
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new MediaFragment()).addToBackStack("v").commit();
+            if(autonumber.getText().equals("")!=true&&Pattern.matches("^[а-яА-Я]\\d{3}[а-яА-Я]{2}$",autonumber.getText())==true){
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new MediaFragment()).addToBackStack("v").commit();
+            }
+            else{
+                autonumber.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border_red));
+            }
+
         });
+
+
+
 
         return v;
 

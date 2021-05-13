@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
       MaterialToolbar appBarLayout=(MaterialToolbar) findViewById(R.id.topAppBar);
         //TODO: appbar layout navigation icon
 
-        getSupportFragmentManager().beginTransaction().add(R.id.fragments_container,new AccidentFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragments_container,new MapFragment()).commit();
         appBarLayout.setNavigationOnClickListener(v-> {
             getSupportFragmentManager().popBackStack();
 
