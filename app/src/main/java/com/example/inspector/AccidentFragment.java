@@ -11,13 +11,16 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import android.service.autofill.RegexValidator;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.regex.Pattern;
 
@@ -74,7 +77,9 @@ import java.util.regex.Pattern;
                 R.array.accidents_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         accident_type.setAdapter(adapter);
-        TextView autonumber=(TextView) v.findViewById(R.id.AF_autonumber);
+        EditText autonumber= (EditText) v.findViewById(R.id.AF_autonumber);
+        EditText definition = (EditText) v.findViewById(R.id.AF_definition);
+
         autonumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -94,8 +99,15 @@ import java.util.regex.Pattern;
         AF_next = (Button) v.findViewById(R.id.AF_next);
         AF_next.setOnClickListener(v3 ->{
             if(autonumber.getText().equals("")!=true&&Pattern.matches("^[а-яА-Я]\\d{3}[а-яА-Я]{2}$",autonumber.getText())==true){
+                My f = (My) getActivity();
+                f.addValue(MainActivity.definition_of_accident,(String) definition.getText().toString());
+                f.addValue(MainActivity.autonumber_of_accident, (String) autonumber.getText().toString());
 
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new MediaFragment()).addToBackStack("v").commit();
+                f.addValue(MainActivity.type_of_accident, accident_type.getSelectedItem().toString() );
+
+                Toast.makeText(getActivity(),accident_type.getSelectedItem().toString()+"   hnj",Toast.LENGTH_LONG).show();
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new MediaFragment()).addToBackStack("MediaFragment").commit();
             }
             else{
                 autonumber.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border_red));

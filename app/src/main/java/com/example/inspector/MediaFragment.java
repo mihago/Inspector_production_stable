@@ -132,7 +132,7 @@ public class MediaFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v=inflater.inflate(R.layout.fragment_media, container, false);
-
+        Button MediaF_next = (Button) v.findViewById(R.id.MediaF_next);
         imageView = v.findViewById(R.id.imageView);
         addPhoto = v.findViewById(R.id.addPhoto);
         previewView =v.findViewById(R.id.previewView);
@@ -153,7 +153,14 @@ public class MediaFragment extends Fragment {
         }, ContextCompat.getMainExecutor(getActivity()));
 
 
+        MediaF_next.setOnClickListener(v3 ->{
 
+
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new MapFragment()).addToBackStack("MapFragment").commit();
+
+
+
+        });
 
 
 

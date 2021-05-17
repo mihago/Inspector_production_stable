@@ -1,12 +1,21 @@
 package com.example.inspector;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.MailTo;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +68,87 @@ public class ContactFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_contact, container, false);
+        EditText FIO = (EditText) v.findViewById(R.id.CF_FIO);
+        EditText Email = (EditText) v.findViewById(R.id.CF_email);
+        EditText phone = (EditText) v.findViewById(R.id.CF_phone);
+        FIO.setOnFocusChangeListener((v1, hasFocus) -> {
+            if(!hasFocus) {
+                if(Pattern.matches("^*\\t*",FIO.getText())){
+                    FIO.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border));
+
+                }
+                else{
+                   FIO.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border_red));
+                }
+            }
+        });
+        Email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    if(Pattern.matches("^[a-zA-z]+@[a-zA-z]+[.][a-zA-z]+$",Email.getText())){
+                        Email.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border));
+
+                    }
+                    else{
+                       Email.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border_red));
+                    }
+                }
+            }
+        });
+       phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus) {
+                    if(Pattern.matches("^[+\\d]\\d{11}$",phone.getText())){
+                        phone.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border));
+
+                    }
+                    else{
+                       phone.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border_red));
+                    }
+                }
+            }
+        });
+        Button CF_next = (Button) v.findViewById(R.id.CF_next);
+        CF_next.setOnClickListener(v4->{
+            if(Pattern.matches("^[a-zA-Z]{2,30}$",FIO.getText())==true){
+                if(Pattern.matches("^[+\\d]\\d{11}$", phone.getText())==true){
+                    My f=(My) getActivity();
+                    Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                    intent.setType("plain/text");
+                   intent.putExtra(android.content.Intent.EXTRA_EMAIL,
+                            new String[] { "mihago2004@gmail.com" });
+                   intent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+                            "InspectorApp");
+                   String text="Здравствуйте! Обнаружил следующее нарушение" +f.getValue(MainActivity.type_of_accident)+f.getValue(MainActivity.definition_of_accident)+
+                          ". Номер машины правонарушителя " +f.getValue(MainActivity.autonumber_of_accident)+
+                           "Мои контактные данные \n ФИО: "+FIO.getText().toString()+
+                           "\nЭл.почта:" + Email.getText().toString()+
+                           "\n Номер телефона: "+ phone.getText().toString()
+                           ;
+                   intent.putExtra(android.content.Intent.EXTRA_TEXT,
+                          text);
+                    ContactFragment.this.startActivity(Intent.createChooser(intent,"Отправка Письма"));
+
+
+
+                }
+                else{
+                    phone.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border_red));
+                }
+
+
+            }
+            else{
+                FIO.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border_red));
+            }
+        });
+
+
+
+
+
         // Inflate the layout for this fragment
         return v;
     }
