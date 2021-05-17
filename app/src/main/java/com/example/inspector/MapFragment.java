@@ -98,17 +98,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         // Inflate the layout for this fragment
         MF_next.setOnClickListener(v3 ->{
-            if(latitude!=0&&longitude!=0){
+            if(isCameraMoved==false){
+            latitude=map.getCameraPosition().target.latitude;
+            longitude =map.getCameraPosition().target.longitude;
+            Toast.makeText(getContext(),"" +latitude+longitude,Toast.LENGTH_LONG).show();}
+
                 My f=(My) getActivity();
                 f.addValue(MainActivity.latitude, ""+ latitude);
                 f.addValue(MainActivity.longitude, ""+ longitude);
                 Toast.makeText(getContext(),"" +latitude+"   "+ longitude,Toast.LENGTH_LONG).show();
 
 
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new ContactFragment()).addToBackStack("ContactFragment").commit();}
-            else{
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new ContactFragment()).addToBackStack("ContactFragment").commit();
 
-            }
 
 
 
@@ -123,9 +125,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 map.setMyLocationEnabled(true);
                 map.setOnMyLocationButtonClickListener(this);
                 map.setOnMyLocationClickListener(this);
-                latitude=map.getCameraPosition().target.latitude;
-                longitude =map.getCameraPosition().target.longitude;
-                Toast.makeText(getContext(),"" +latitude+longitude,Toast.LENGTH_LONG).show();
+
+
 
 
 
@@ -161,6 +162,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         longitude =map.getCameraPosition().target.longitude;
         Toast.makeText(getContext(),"" +latitude+longitude,Toast.LENGTH_LONG).show();
         return false;
+
     }
 
     @Override
@@ -169,6 +171,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             latitude=map.getCameraPosition().target.latitude;
             longitude =map.getCameraPosition().target.longitude;
             Toast.makeText(getContext(),"" +latitude+longitude,Toast.LENGTH_LONG).show();
+            isCameraMoved=true;
         }else{
 
         }

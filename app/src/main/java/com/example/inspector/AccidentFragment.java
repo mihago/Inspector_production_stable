@@ -1,6 +1,9 @@
 
         package com.example.inspector;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +24,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.regex.Pattern;
 
@@ -72,6 +78,8 @@ import java.util.regex.Pattern;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_accident, container, false);
+
+
         Spinner accident_type = (Spinner) v.findViewById(R.id.accident_type);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.accidents_array, android.R.layout.simple_spinner_item);

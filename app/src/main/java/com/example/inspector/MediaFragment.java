@@ -1,8 +1,10 @@
 package com.example.inspector;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -19,6 +21,7 @@ import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -40,6 +43,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
@@ -51,6 +55,7 @@ public class MediaFragment extends Fragment {
     ExecutorService mImageCaptureExecutorService;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     ImageCapture imageCapture;
+    final int CAMERA_PERMISSION=150;
     Preview preview;
     Camera camera;
     CameraSelector cameraSelector;
@@ -97,8 +102,7 @@ public class MediaFragment extends Fragment {
 
 
         super.onCreate(savedInstanceState);
-        cameraProviderFuture = ProcessCameraProvider.getInstance(getContext());
-        mImageCaptureExecutorService = Executors.newSingleThreadExecutor();
+
 
 
 
@@ -108,21 +112,21 @@ public class MediaFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        /*galleryAddPic();
-        try {
-            wait(3000);
-            setPic(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
 
 
-        Toast.makeText(getContext(),"ggggg",Toast.LENGTH_LONG).show();
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+        Toast.makeText(getActivity(),"ВАЛИ ОТСЕДОВА! БЕГОМ Вперёд",Toast.LENGTH_LONG).show();
 
-            Toast.makeText(getContext(),"ggggg",Toast.LENGTH_LONG);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+            Toast.makeText(getActivity(),"ttttuyr8t",Toast.LENGTH_LONG).show();
         }
+        else{
+            Toast.makeText(getActivity(),"Баг сужен до этого места",Toast.LENGTH_LONG).show();
+        }
+
 
     }
 
@@ -135,22 +139,18 @@ public class MediaFragment extends Fragment {
         Button MediaF_next = (Button) v.findViewById(R.id.MediaF_next);
         imageView = v.findViewById(R.id.imageView);
         addPhoto = v.findViewById(R.id.addPhoto);
+        addPhoto.setOnClickListener(v4->{
+          int request_code =ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CAMERA);
+          if(request_code == PackageManager.PERMISSION_GRANTED){
+              dispatchTakePictureIntent(1);
+          }
+          else{
+              ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CAMERA},CAMERA_PERMISSION);
+          }
+
+        });
         previewView =v.findViewById(R.id.previewView);
-      imageCapture =
-                new ImageCapture.Builder()
 
-                        .build();
-
-
-        cameraProviderFuture.addListener(() -> {
-            try {
-                cameraProvider = cameraProviderFuture.get();
-                bindPreview(cameraProvider);
-            } catch (ExecutionException | InterruptedException e) {
-                // No errors need to be handled for this Future.
-                // This should never be reached.
-            }
-        }, ContextCompat.getMainExecutor(getActivity()));
 
 
         MediaF_next.setOnClickListener(v3 ->{
@@ -169,20 +169,85 @@ public class MediaFragment extends Fragment {
 
         return v;
     }
-    void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
-      preview = new Preview.Builder()
-                .build();
+    @Override
+    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
 
-     cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                .build();
-
-        preview.setSurfaceProvider(previewView.getSurfaceProvider());
-
-       camera = cameraProvider.bindToLifecycle((LifecycleOwner)getContext(), cameraSelector, imageCapture,preview);
+        switch (requestCode){
+            case CAMERA_PERMISSION:
+                if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    dispatchTakePictureIntent(9);
+                }
+                break;
+        }
     }
 
+    private void dispatchTakePictureIntent(int i) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            Toast.makeText(getActivity(),"gggg",Toast.LENGTH_LONG).show();
+        } catch (ActivityNotFoundException e) {
 
+            Toast.makeText(getActivity(),"tttt",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getActivity(),
+                        "com.example.inspector.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        Objects.requireNonNull(getContext()).sendBroadcast(mediaScanIntent);
+
+    }
+    private void setPic() {
+        // Get the dimensions of the View
+        int targetW = imageView.getWidth();
+        int targetH = imageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+        imageView.setImageBitmap(bitmap);
+    }
 
 
 }

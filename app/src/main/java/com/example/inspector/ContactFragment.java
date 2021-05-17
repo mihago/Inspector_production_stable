@@ -122,7 +122,10 @@ public class ContactFragment extends Fragment {
                    intent.putExtra(android.content.Intent.EXTRA_SUBJECT,
                             "InspectorApp");
                    String text="Здравствуйте! Обнаружил следующее нарушение" +f.getValue(MainActivity.type_of_accident)+f.getValue(MainActivity.definition_of_accident)+
-                          ". Номер машины правонарушителя " +f.getValue(MainActivity.autonumber_of_accident)+
+                           "\n"+
+                           "на этом месте "+ f.getValue(MainActivity.latitude)+" "+f.getValue(MainActivity.longitude)+". \n"+
+                          "Номер машины правонарушителя " +f.getValue(MainActivity.autonumber_of_accident)+"\n"+
+
                            "Мои контактные данные \n ФИО: "+FIO.getText().toString()+
                            "\nЭл.почта:" + Email.getText().toString()+
                            "\n Номер телефона: "+ phone.getText().toString()
