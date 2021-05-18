@@ -5,6 +5,7 @@
     <string name="new_claim">Новая заявка</string>
     <string name="claims">Заявки</string>
     <string-array name="accidents_array">
+        <item>Выберите тип</item>
         <item>Неправильная парковка</item>
         <item>Не оплатил парковку</item>
         <item>Загораживает проезд</item>

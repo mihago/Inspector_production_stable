@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -85,6 +86,7 @@ import java.util.regex.Pattern;
                 R.array.accidents_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         accident_type.setAdapter(adapter);
+
         EditText autonumber= (EditText) v.findViewById(R.id.AF_autonumber);
         EditText definition = (EditText) v.findViewById(R.id.AF_definition);
 
@@ -107,6 +109,7 @@ import java.util.regex.Pattern;
         AF_next = (Button) v.findViewById(R.id.AF_next);
         AF_next.setOnClickListener(v3 ->{
             if(autonumber.getText().equals("")!=true&&Pattern.matches("^[а-яА-Я]\\d{3}[а-яА-Я]{2}$",autonumber.getText())==true){
+                if(accident_type.getSelectedItem().toString()!="Выберите тип"){
                 My f = (My) getActivity();
                 f.addValue(MainActivity.definition_of_accident,(String) definition.getText().toString());
                 f.addValue(MainActivity.autonumber_of_accident, (String) autonumber.getText().toString());
@@ -115,10 +118,17 @@ import java.util.regex.Pattern;
 
                 Toast.makeText(getActivity(),accident_type.getSelectedItem().toString()+"   hnj",Toast.LENGTH_LONG).show();
 
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new MediaFragment()).addToBackStack("MediaFragment").commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragments_container,new MediaFragment()).addToBackStack("MediaFragment").commit();}
+                else{
+                    accident_type.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border_red));
+                }
             }
             else{
+                if(accident_type.getSelectedItem().toString()=="Выберите тип"){
+                    accident_type.setBackgroundColor(Color.RED);
+                }
                 autonumber.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border_red));
+                autonumber.requestFocus();
             }
 
         });

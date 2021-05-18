@@ -63,11 +63,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.90" />
-        <Button
+
+    <Button
         android:id="@+id/CF_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginBottom="32dp"
         android:background="@drawable/border_bt_green"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
@@ -76,8 +78,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/CF_guideline2"
         app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toStartOf="@+id/CF_guideline1"
-       />
+        app:layout_constraintStart_toStartOf="@+id/CF_guideline1" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,19 +2,35 @@ package com.example.inspector;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.MailTo;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -64,6 +80,7 @@ public class ContactFragment extends Fragment {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,7 +90,7 @@ public class ContactFragment extends Fragment {
         EditText phone = (EditText) v.findViewById(R.id.CF_phone);
         FIO.setOnFocusChangeListener((v1, hasFocus) -> {
             if(!hasFocus) {
-                if(Pattern.matches("^*\\t*",FIO.getText())){
+                if(Pattern.matches("^(([А-Яа-я]{2,30} ){2}[А-Яа-я]{2,30})|([А-Яа-я]{2,30} [А-Яа-я]{2,30})$",FIO.getText())){
                     FIO.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.border));
 
                 }
@@ -112,26 +129,65 @@ public class ContactFragment extends Fragment {
         });
         Button CF_next = (Button) v.findViewById(R.id.CF_next);
         CF_next.setOnClickListener(v4->{
-            if(Pattern.matches("^[a-zA-Z]{2,30}$",FIO.getText())==true){
+            if(Pattern.matches("^(([А-Яа-я]{2,30} ){2}[А-Яа-я]{2,30})|([А-Яа-я]{2,30} [А-Яа-я]{2,30})$", FIO.getText())){
                 if(Pattern.matches("^[+\\d]\\d{11}$", phone.getText())==true){
                     My f=(My) getActivity();
-                    Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+
+
+                    ArrayList<String> g=f.getBundle().getStringArrayList("g");
+                    ArrayList<Uri> d =new ArrayList<Uri>();
+                    for(String c :g){
+                        d.add(Uri.parse(c));
+                        Log.d("gfg","123");
+                        Log.d("gfg","153");
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                     intent.setType("plain/text");
+
+
+
+
+
+
+
+
                    intent.putExtra(android.content.Intent.EXTRA_EMAIL,
                             new String[] { "mihago2004@gmail.com" });
                    intent.putExtra(android.content.Intent.EXTRA_SUBJECT,
                             "InspectorApp");
                    String text="Здравствуйте! Обнаружил следующее нарушение" +f.getValue(MainActivity.type_of_accident)+f.getValue(MainActivity.definition_of_accident)+
                            "\n"+
-                           "на этом месте "+ f.getValue(MainActivity.latitude)+" "+f.getValue(MainActivity.longitude)+". \n"+
-                          "Номер машины правонарушителя " +f.getValue(MainActivity.autonumber_of_accident)+"\n"+
+                           "на этом месте "+ f.getValue(MainActivity.latitude)+" "+f.getValue(MainActivity.longitude).toString()+". \n"+
+                          "Номер машины правонарушителя " +f.getValue(MainActivity.autonumber_of_accident).toString()+"\n"+
 
                            "Мои контактные данные \n ФИО: "+FIO.getText().toString()+
                            "\nЭл.почта:" + Email.getText().toString()+
                            "\n Номер телефона: "+ phone.getText().toString()
                            ;
-                   intent.putExtra(android.content.Intent.EXTRA_TEXT,
-                          text);
+                   CharSequence p =text;
+                   intent.putExtra(android.content.Intent.EXTRA_TEXT,p
+                          ).putExtra(Intent.EXTRA_STREAM,d );
+
                     ContactFragment.this.startActivity(Intent.createChooser(intent,"Отправка Письма"));
 
 
