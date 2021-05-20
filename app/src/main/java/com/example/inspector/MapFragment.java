@@ -145,9 +145,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         map=googleMap;
 
         enableMyLocation();
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(0, 0))
-                .title("Marker"));
+
     }
 
     @Override

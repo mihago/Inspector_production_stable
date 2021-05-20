@@ -95,6 +95,7 @@
         android:focusable="true"/>
 
     <EditText
+        android:padding="6dp"
         android:id="@+id/AF_autonumber"
         android:layout_width="0dp"
         android:layout_height="50dp"

@@ -7,10 +7,11 @@
     <string-array name="accidents_array">
         <item>Выберите тип</item>
         <item>Неправильная парковка</item>
-        <item>Не оплатил парковку</item>
         <item>Загораживает проезд</item>
         <item>Парковка в неположенном месте</item>
-        <item>Проезд на красный свет</item>
+        <item>Нечитаемый номер</item>
+        <item>Трещина на лобовом стекле</item>
+        <item>Не остановился перед стоп-линией</item>
 
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->

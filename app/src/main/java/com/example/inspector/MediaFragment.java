@@ -62,7 +62,7 @@ import java.util.concurrent.Executors;
 public class MediaFragment extends Fragment {
     ExecutorService mImageCaptureExecutorService;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
-    private final int MAX_AMOUNT_OF_PHOTOS=3;
+    private final int MAX_AMOUNT_OF_PHOTOS=10;
     ImageCapture imageCapture;
     RecyclerView MediaF_photos;
     final int CAMERA_PERMISSION=150;
@@ -125,27 +125,19 @@ public class MediaFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
 
-
-
-
-
-
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Toast.makeText(getContext(),"Слишком много фотографий",Toast.LENGTH_LONG);
-            Log.d("gfg","1");
+        if (requestCode == REQUEST_IMAGE_CAPTURE ) {
+            if(resultCode == RESULT_OK&&data.getExtras()!=null){
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             photoarray.add(imageBitmap);
-          MediaF_next.setText("ggtg");
-
+            MediaF_photos.getAdapter().notifyDataSetChanged();
+            }
+            else{
+                Log.d("my1","somethingWrong");
+            }
 
 
         }
-        else{
-
-        }
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -159,11 +151,7 @@ public class MediaFragment extends Fragment {
         MediaF_next = (Button) v.findViewById(R.id.MediaF_next);
          MediaF_photos = (RecyclerView) v.findViewById(R.id.MediaF_photos) ;
          GridLayoutManager glm;
-         glm=new GridLayoutManager(getActivity(),2,GridLayoutManager.HORIZONTAL,false);
-
-
-
-
+         glm=new GridLayoutManager(getActivity(),4,GridLayoutManager.VERTICAL,false);
 
         MediaF_photos.setLayoutManager(glm);
 
@@ -196,7 +184,6 @@ public class MediaFragment extends Fragment {
           }
 
         });
-        //previewView =v.findViewById(R.id.previewView);
 
 
 
@@ -255,7 +242,16 @@ public class MediaFragment extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Uri uri =Uri.fromFile(image);
+
+                Uri uri = FileProvider.getUriForFile(
+                        getContext(),
+                        "com.example.inspector.fileprovider",
+                        image);
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+
+
+                mediaScanIntent.setData(uri);
+                getActivity().sendBroadcast(mediaScanIntent);
 
                 uris.add(uri.toString());
                 Toast.makeText(getContext(),uri.toString(),Toast.LENGTH_LONG);
@@ -289,6 +285,7 @@ public class MediaFragment extends Fragment {
         switch (requestCode){
             case CAMERA_PERMISSION:
                 if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    if(photoarray.size()<MAX_AMOUNT_OF_PHOTOS){}
                     dispatchTakePictureIntent(9 );
                 }
                 break;

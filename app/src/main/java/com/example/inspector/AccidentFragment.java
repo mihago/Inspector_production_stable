@@ -108,7 +108,7 @@ import java.util.regex.Pattern;
 
         AF_next = (Button) v.findViewById(R.id.AF_next);
         AF_next.setOnClickListener(v3 ->{
-            if(autonumber.getText().equals("")!=true&&Pattern.matches("^[а-яА-Я]\\d{3}[а-яА-Я]{2}$",autonumber.getText())==true){
+            if(autonumber.getText().equals("")!=true&&Pattern.matches("^[а-яА-Я]\\d{3}[а-яА-Я]{2}(\\d{2}|\\d{3})$",autonumber.getText())==true){
                 if(accident_type.getSelectedItem().toString()!="Выберите тип"){
                 My f = (My) getActivity();
                 f.addValue(MainActivity.definition_of_accident,(String) definition.getText().toString());
